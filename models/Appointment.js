@@ -1,0 +1,37 @@
+const mongoose = require('mongoose');
+
+const appointmentSchema = new mongoose.Schema({
+    patientId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    doctorId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', // Referencing the User who is a doctor
+        required: true
+    },
+    date: {
+        type: String, // YYYY-MM-DD
+        required: true
+    },
+    time: {
+        type: String, // HH:mm
+        required: true
+    },
+    reason: {
+        type: String
+    },
+    type: {
+        type: String,
+        enum: ['in-person', 'video'],
+        default: 'in-person'
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected', 'completed', 'cancelled'],
+        default: 'pending'
+    }
+}, { timestamps: true });
+
+module.exports = mongoose.model('Appointment', appointmentSchema);
