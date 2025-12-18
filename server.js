@@ -17,18 +17,39 @@ connectDB().then(() => {
 const app = express();
 const server = http.createServer(app);
 
-// Initialize Socket.IO with CORS
+// Initialize Socket.IO with CORS - Allow both localhost and production frontend
+const socketOrigins = [
+    "http://localhost:5173",
+    "https://athulkdinu-testmodefrontend.vercel.app",
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
 const io = new Server(server, {
     cors: {
-        origin: process.env.FRONTEND_URL || "http://localhost:5173",
+        origin: socketOrigins.length > 0 ? socketOrigins : "http://localhost:5173",
         methods: ["GET", "POST"],
         credentials: true
     }
 });
 
-// CORS configuration
+// CORS configuration - Allow both localhost and production frontend
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://athulkdinu-testmodefrontend.vercel.app",
+    process.env.FRONTEND_URL
+].filter(Boolean); // Remove undefined values
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
