@@ -12,6 +12,7 @@ const getAllDoctors = async (req, res) => {
         // Frontend expects: { id, name, specialty, ... }
         const formattedDoctors = doctors.map(doc => ({
             id: doc._id,
+            userId: doc.userId._id || doc.userId,
             name: doc.userId.name,
             specialty: doc.specialty,
             experience: doc.experience,
