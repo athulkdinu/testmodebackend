@@ -2,18 +2,16 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// Generate JWT
+//  JWT generate aakum
 const generateToken = (id, role) => {
     return jwt.sign({ id, role }, process.env.JWT_SECRET, {
         expiresIn: '30d',
     });
 };
 
-// @desc    Register a new user (Patient)
-// @route   POST /api/auth/register
-// @access  Public
+
 const registerUser = async (req, res) => {
-    const { name, email, password, role } = req.body; // Role optional, default patient
+    const { name, email, password, role } = req.body;
 
     try {
         const userExists = await User.findOne({ email });
@@ -48,14 +46,10 @@ const registerUser = async (req, res) => {
     }
 };
 
-// @desc    Auth user & get token
-// @route   POST /api/auth/login
-// @access  Public
-const loginUser = async (req, res) => {
-    // Check if email (new frontend) or username (old/legacy) is passed
-    const { email, username, password } = req.body;
 
-    // Use email if present, otherwise username
+const loginUser = async (req, res) => {
+    
+    const { email, username, password } = req.body;
     const loginIdentifier = email || username;
     console.log(`Login Attempt: ${loginIdentifier}`);
 

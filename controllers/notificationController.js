@@ -2,9 +2,7 @@ const Notification = require('../models/Notification');
 const Appointment = require('../models/Appointment');
 const Medicine = require('../models/Medicine');
 
-// @desc    Get notifications
-// @route   GET /api/notifications
-// @access  Private
+
 const getNotifications = async (req, res) => {
     try {
         const notifications = await Notification.find({ userId: req.user.id })
@@ -16,9 +14,7 @@ const getNotifications = async (req, res) => {
     }
 };
 
-// @desc    Mark notification as read
-// @route   PUT /api/notifications/:id/read
-// @access  Private
+
 const markAsRead = async (req, res) => {
     try {
         const notification = await Notification.findById(req.params.id);
@@ -40,9 +36,7 @@ const markAsRead = async (req, res) => {
     }
 };
 
-// @desc    Mark all notifications as read
-// @route   PUT /api/notifications/read-all
-// @access  Private
+
 const markAllAsRead = async (req, res) => {
     try {
         await Notification.updateMany(
@@ -56,9 +50,7 @@ const markAllAsRead = async (req, res) => {
     }
 };
 
-// @desc    Delete notification
-// @route   DELETE /api/notifications/:id
-// @access  Private
+
 const deleteNotification = async (req, res) => {
     try {
         const notification = await Notification.findById(req.params.id);
@@ -78,7 +70,6 @@ const deleteNotification = async (req, res) => {
     }
 };
 
-// Helper function to create notification (can be called from other controllers)
 const createNotification = async (userId, title, message, type = 'general', relatedId = null) => {
     try {
         await Notification.create({

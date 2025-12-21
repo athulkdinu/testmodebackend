@@ -11,17 +11,17 @@ const recordSchema = new mongoose.Schema({
         required: true
     },
     date: {
-        type: String // YYYY-MM-DD
+        type: String 
     },
     category: {
-        type: String, // e.g., "lab-report", "imaging"
+        type: String, 
         required: true
     },
     size: {
         type: String
     },
     fileUrl: {
-        type: String // Path to file or URL
+        type: String
     }
 }, { timestamps: true });
 

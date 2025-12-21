@@ -1,9 +1,6 @@
 const Appointment = require('../models/Appointment');
 const { createNotification } = require('./notificationController');
 
-// @desc    Get appointments
-// @route   GET /api/appointments
-// @access  Private
 const getAppointments = async (req, res) => {
     try {
         let query = {};
@@ -16,6 +13,7 @@ const getAppointments = async (req, res) => {
         const appointments = await Appointment.find(query)
             .populate('doctorId', 'name')
             .populate('patientId', 'name');
+console.log(appointments);
 
         res.json(appointments);
     } catch (error) {
@@ -23,38 +21,25 @@ const getAppointments = async (req, res) => {
     }
 };
 
-// @desc    Book appointment
-// @route   POST /api/appointments
-// @access  Private/Patient
-const bookAppointment = async (req, res) => {
-    // req.body: { doctorId, date, time, type, reason }
-    // doctorId passed might be Doctor table ID or User ID? 
-    // Frontend likely passes Doctor ID (from getAllDoctors).
-    // If Doctor ID, I need to find the User ID associated, or store Doctor ID.
-    // My model stores 'doctorId' with ref 'User'.
-    // So if frontend sends Doctor ID (from Doctor collection), I need to lookup.
 
-    // Let's assume frontend sends Doctor user ID or I fetch it.
-    // If I used getAllDoctors which returns { pk: doctor._id, ... }, it's Doctor ID.
+const bookAppointment = async (req, res) => {
+    
     const { doctorId, date, time, type, reason } = req.body;
 
     try {
-        // Check if doctorId is Doctor model ID
+        
         const Doctor = require('../models/Doctor');
 
-        // Find the Doctor document to get the associated User ID
+       
         let targetUserId = doctorId;
 
-        // Try to find if the provided ID is a Doctor Table ID
-        // If the frontend sends the User ID directly, this query might fail or return null, which is fine.
-        // But usually frontend displays doctors from Doctor collection.
+        
         const doctorDoc = await Doctor.findById(doctorId);
 
         if (doctorDoc) {
             targetUserId = doctorDoc.userId;
         } else {
-            // It might be that doctorId passed IS the User ID already.
-            // Let's verify if a User exists with this ID and has role 'doctor'
+           
             const User = require('../models/User');
             const userDoc = await User.findById(doctorId);
             if (userDoc && userDoc.role === 'doctor') {
@@ -74,7 +59,7 @@ const bookAppointment = async (req, res) => {
             status: 'pending'
         });
         
-        // Create notification for doctor
+       
         await createNotification(
             targetUserId,
             'New Appointment Request',
@@ -89,15 +74,13 @@ const bookAppointment = async (req, res) => {
     }
 };
 
-// @desc    Cancel/Update appointment
-// @route   PUT /api/appointments/:id
-// @access  Private
+
 const updateAppointment = async (req, res) => {
     try {
         const appointment = await Appointment.findById(req.params.id);
         if (!appointment) return res.status(404).json({ message: 'Not found' });
 
-        // Check ownership
+        
         if (appointment.patientId.toString() !== req.user.id && appointment.doctorId.toString() !== req.user.id && req.user.role !== 'admin') {
             return res.status(401).json({ message: 'Not authorized' });
         }
@@ -106,7 +89,7 @@ const updateAppointment = async (req, res) => {
             .populate('doctorId', 'name')
             .populate('patientId', 'name');
         
-        // Create notifications for status changes
+        
         if (req.body.status === 'approved') {
             await createNotification(
                 appointment.patientId,
@@ -131,9 +114,7 @@ const updateAppointment = async (req, res) => {
     }
 };
 
-// @desc    Approve appointment
-// @route   PUT /api/appointments/:id/approve
-// @access  Private/Doctor
+
 const approveAppointment = async (req, res) => {
     try {
         const appointment = await Appointment.findById(req.params.id);
@@ -164,9 +145,7 @@ const approveAppointment = async (req, res) => {
     }
 };
 
-// @desc    Reject appointment
-// @route   PUT /api/appointments/:id/reject
-// @access  Private/Doctor
+
 const rejectAppointment = async (req, res) => {
     try {
         const appointment = await Appointment.findById(req.params.id);

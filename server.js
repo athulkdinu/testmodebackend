@@ -5,11 +5,11 @@ const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
 const connectDB = require('./config/db');
-const seedAdmin = require('./utils/seedAdmin'); // Import seeder
+const seedAdmin = require('./utils/seedAdmin'); 
 
 dotenv.config();
 
-// Connect DB and then Seed Admin
+
 connectDB().then(() => {
     seedAdmin();
 });
@@ -17,7 +17,6 @@ connectDB().then(() => {
 const app = express();
 const server = http.createServer(app);
 
-// Initialize Socket.IO with CORS - Allow both localhost and production frontend
 const socketOrigins = [
     "http://localhost:5173",
     "https://athulkdinu-testmodefrontend.vercel.app",
@@ -32,7 +31,7 @@ const io = new Server(server, {
     }
 });
 
-// CORS configuration - Allow both localhost and production frontend
+
 const allowedOrigins = [
     "http://localhost:5173",
     "https://athulkdinu-testmodefrontend.vercel.app",

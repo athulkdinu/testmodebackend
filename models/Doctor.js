@@ -19,7 +19,7 @@ const doctorSchema = new mongoose.Schema({
     },
     schedule: [{
         day: String,
-        slots: [String] // e.g., ["09:00 AM", "10:00 AM"]
+        slots: [String] 
     }]
 }, { timestamps: true });
 

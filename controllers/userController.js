@@ -18,7 +18,7 @@ const getAllUsers = async (req, res) => {
 // @route   POST /api/admin/users
 // @access  Private/Admin
 const addUser = async (req, res) => {
-    const { name, email, role } = req.body;
+    const { name, email, role, phone } = req.body;
     // Password default? Or generated.
     const password = "password123"; // Default password for admin created users
     // In real app, email invite.
@@ -32,6 +32,7 @@ const addUser = async (req, res) => {
         const user = await User.create({
             name,
             email,
+            phone,
             password: hashedPassword,
             role: role || 'patient'
         });

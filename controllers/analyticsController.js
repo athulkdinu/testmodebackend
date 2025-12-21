@@ -2,9 +2,7 @@ const Appointment = require('../models/Appointment');
 const User = require('../models/User');
 const Doctor = require('../models/Doctor');
 
-// @desc    Get system analytics
-// @route   GET /api/analytics
-// @access  Private/Admin
+
 const getSystemAnalytics = async (req, res) => {
     try {
         // Doctors count
@@ -13,7 +11,7 @@ const getSystemAnalytics = async (req, res) => {
         // Patients count
         const patientsCount = await User.countDocuments({ role: 'patient' });
         
-        // Appointments per week (last 4 weeks)
+        // Appointments per week 
         const appointmentsPerWeek = [];
         for (let i = 3; i >= 0; i--) {
             const weekStart = new Date();
@@ -45,7 +43,7 @@ const getSystemAnalytics = async (req, res) => {
             cancelled: await Appointment.countDocuments({ status: 'cancelled' })
         };
         
-        // Appointments per day (last 7 days)
+        // Appointments per day 
         const appointmentsPerDay = [];
         for (let i = 6; i >= 0; i--) {
             const date = new Date();

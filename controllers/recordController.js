@@ -3,9 +3,7 @@ const path = require('path');
 const fs = require('fs').promises;
 const fsSync = require('fs');
 
-// @desc    Get all records
-// @route   GET /api/records
-// @access  Private
+
 const getRecords = async (req, res) => {
     try {
         const records = await Record.find({ userId: req.user.id });
@@ -15,9 +13,7 @@ const getRecords = async (req, res) => {
     }
 };
 
-// @desc    Add a record (with file upload)
-// @route   POST /api/records
-// @access  Private
+
 const addRecord = async (req, res) => {
     try {
         const { filename, date, category, notes } = req.body;
@@ -43,9 +39,7 @@ const addRecord = async (req, res) => {
     }
 };
 
-// @desc    Update record
-// @route   PUT /api/records/:id
-// @access  Private
+
 const updateRecord = async (req, res) => {
     try {
         const record = await Record.findById(req.params.id);
@@ -62,9 +56,7 @@ const updateRecord = async (req, res) => {
     }
 };
 
-// @desc    Delete record
-// @route   DELETE /api/records/:id
-// @access  Private
+
 const deleteRecord = async (req, res) => {
     try {
         const record = await Record.findById(req.params.id);
@@ -74,7 +66,7 @@ const deleteRecord = async (req, res) => {
             return res.status(401).json({ message: 'Not authorized' });
         }
 
-        // Delete file if exists
+        
         if (record.fileUrl) {
             const filePath = path.join(__dirname, '..', record.fileUrl);
             if (fsSync.existsSync(filePath)) {
@@ -89,9 +81,7 @@ const deleteRecord = async (req, res) => {
     }
 };
 
-// @desc    Download record file
-// @route   GET /api/records/:id/download
-// @access  Private
+
 const downloadRecord = async (req, res) => {
     try {
         const record = await Record.findById(req.params.id);
@@ -116,9 +106,7 @@ const downloadRecord = async (req, res) => {
     }
 };
 
-// @desc    Get patient records (for doctor)
-// @route   GET /api/records/patient/:patientId
-// @access  Private/Doctor
+
 const getPatientRecords = async (req, res) => {
     try {
         const { patientId } = req.params;

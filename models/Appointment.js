@@ -8,15 +8,15 @@ const appointmentSchema = new mongoose.Schema({
     },
     doctorId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Referencing the User who is a doctor
+        ref: 'User', 
         required: true
     },
     date: {
-        type: String, // YYYY-MM-DD
+        type: String, 
         required: true
     },
     time: {
-        type: String, // HH:mm
+        type: String, 
         required: true
     },
     reason: {

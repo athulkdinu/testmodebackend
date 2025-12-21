@@ -1,13 +1,11 @@
 const HealthInsight = require('../models/HealthInsight');
 const Appointment = require('../models/Appointment');
 
-// @desc    Get health insights
-// @route   GET /api/health-insights
-// @access  Private/Patient
+
 const getHealthInsights = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { type } = req.query; // Optional filter by type
+        const { type } = req.query; 
         
         let query = { userId };
         if (type) {
@@ -23,9 +21,7 @@ const getHealthInsights = async (req, res) => {
     }
 };
 
-// @desc    Add health insight
-// @route   POST /api/health-insights
-// @access  Private/Patient
+
 const addHealthInsight = async (req, res) => {
     try {
         const { type, value, additionalData, date, notes } = req.body;
@@ -52,9 +48,7 @@ const addHealthInsight = async (req, res) => {
     }
 };
 
-// @desc    Get BMI tracker data
-// @route   GET /api/health-insights/bmi
-// @access  Private/Patient
+
 const getBMITracker = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -70,9 +64,7 @@ const getBMITracker = async (req, res) => {
     }
 };
 
-// @desc    Get blood pressure trends
-// @route   GET /api/health-insights/blood-pressure
-// @access  Private/Patient
+
 const getBloodPressureTrends = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -88,9 +80,7 @@ const getBloodPressureTrends = async (req, res) => {
     }
 };
 
-// @desc    Get appointment stats
-// @route   GET /api/health-insights/appointment-stats
-// @access  Private/Patient
+
 const getAppointmentStats = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -113,7 +103,7 @@ const getAppointmentStats = async (req, res) => {
             status: 'rejected' 
         });
         
-        // Appointments per month (last 6 months)
+        // Appointments per month 
         const monthlyStats = [];
         for (let i = 5; i >= 0; i--) {
             const date = new Date();

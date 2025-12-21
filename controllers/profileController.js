@@ -2,16 +2,14 @@ const User = require('../models/User');
 const Doctor = require('../models/Doctor');
 const bcrypt = require('bcrypt');
 
-// @desc    Get user profile
-// @route   GET /api/profile
-// @access  Private
+
 const getProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password');
         
         let profile = user.toObject();
         
-        // If doctor, get doctor details
+        
         if (user.role === 'doctor') {
             const doctorDetails = await Doctor.findOne({ userId: user._id });
             profile.doctorDetails = doctorDetails;
@@ -23,9 +21,7 @@ const getProfile = async (req, res) => {
     }
 };
 
-// @desc    Update user profile
-// @route   PUT /api/profile
-// @access  Private
+
 const updateProfile = async (req, res) => {
     try {
         const { name, phone, address, dateOfBirth, gender, contact, password } = req.body;
@@ -53,9 +49,7 @@ const updateProfile = async (req, res) => {
     }
 };
 
-// @desc    Update doctor profile
-// @route   PUT /api/profile/doctor
-// @access  Private/Doctor
+
 const updateDoctorProfile = async (req, res) => {
     try {
         const { specialty, experience, contact, schedule } = req.body;

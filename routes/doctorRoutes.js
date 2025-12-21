@@ -4,7 +4,7 @@ const { getAllDoctors, addDoctor, deleteDoctor, updateDoctor } = require('../con
 const { protect, admin } = require('../middlewares/authMiddleware');
 
 router.route('/')
-    .get(getAllDoctors) // Publicly accessible for booking
+    .get(getAllDoctors) 
     .post(protect, admin, addDoctor);
 
 router.route('/:id')

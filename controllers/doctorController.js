@@ -2,21 +2,19 @@ const Doctor = require('../models/Doctor');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
-// @desc    Get all doctors
-// @route   GET /api/doctors
-// @access  Public (or Private)
+
 const getAllDoctors = async (req, res) => {
     try {
         const doctors = await Doctor.find().populate('userId', 'name email');
-        // Transform for frontend if needed?
-        // Frontend expects: { id, name, specialty, ... }
+        
         const formattedDoctors = doctors.map(doc => ({
             id: doc._id,
             userId: doc.userId._id || doc.userId,
             name: doc.userId.name,
             specialty: doc.specialty,
             experience: doc.experience,
-            // ... other fields
+            user:doc.userId
+            
         }));
         res.json(formattedDoctors);
     } catch (error) {
@@ -24,9 +22,7 @@ const getAllDoctors = async (req, res) => {
     }
 };
 
-// @desc    Add a doctor (Admin)
-// @route   POST /api/admin/doctors
-// @access  Private/Admin
+
 const addDoctor = async (req, res) => {
     try {
         console.log('Adding Doctor Request:', req.body);
@@ -36,9 +32,9 @@ const addDoctor = async (req, res) => {
             return res.status(400).json({ message: 'Please add all required fields' });
         }
 
-        const doctorPassword = password || "password123"; // Use provided or default
+        const doctorPassword = password || "password123"; 
 
-        // Create User first
+        
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(doctorPassword, salt);
 
@@ -49,7 +45,7 @@ const addDoctor = async (req, res) => {
             role: 'doctor'
         });
 
-        // Create Doctor Details
+        
         const doctor = await Doctor.create({
             userId: user._id,
             specialty,
@@ -71,14 +67,12 @@ const addDoctor = async (req, res) => {
     }
 };
 
-// @desc    Delete doctor
-// @route   DELETE /api/admin/doctors/:id
-// @access  Private/Admin
+
 const deleteDoctor = async (req, res) => {
     try {
         const doctor = await Doctor.findById(req.params.id);
         if (doctor) {
-            await User.findByIdAndDelete(doctor.userId); // Delete associated user
+            await User.findByIdAndDelete(doctor.userId); 
             await doctor.deleteOne();
             res.json({ message: 'Doctor removed' });
         } else {
@@ -89,9 +83,7 @@ const deleteDoctor = async (req, res) => {
     }
 };
 
-// @desc    Update doctor
-// @route   PUT /api/admin/doctors/:id
-// @access  Private/Admin
+
 const updateDoctor = async (req, res) => {
     try {
         const { name, email, specialty, experience, contact } = req.body;

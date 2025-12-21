@@ -16,10 +16,10 @@ const healthInsightSchema = new mongoose.Schema({
         required: true
     },
     additionalData: {
-        type: mongoose.Schema.Types.Mixed // For storing BP as {systolic: 120, diastolic: 80}
+        type: mongoose.Schema.Types.Mixed 
     },
     date: {
-        type: String, // YYYY-MM-DD
+        type: String, 
         required: true
     },
     notes: {

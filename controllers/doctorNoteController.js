@@ -1,8 +1,6 @@
 const DoctorNote = require('../models/DoctorNote');
 
-// @desc    Get notes
-// @route   GET /api/doctor_notes
-// @access  Private
+
 const getDoctorNotes = async (req, res) => {
     try {
         let query = {};
@@ -22,12 +20,9 @@ const getDoctorNotes = async (req, res) => {
     }
 };
 
-// @desc    Add note
-// @route   POST /api/doctor_notes
-// @access  Private/Doctor
+
 const addDoctorNote = async (req, res) => {
-    // req.body: { patientId, note, diagnosis, prescription }
-    // patientId is User ID.
+    
     try {
         const note = await DoctorNote.create({
             doctorId: req.user.id,
@@ -39,9 +34,7 @@ const addDoctorNote = async (req, res) => {
     }
 };
 
-// @desc    Update note
-// @route   PUT /api/doctor_notes/:id
-// @access  Private/Doctor
+
 const updateDoctorNote = async (req, res) => {
     try {
         const note = await DoctorNote.findById(req.params.id);
@@ -61,9 +54,7 @@ const updateDoctorNote = async (req, res) => {
     }
 };
 
-// @desc    Get patient notes (for doctor)
-// @route   GET /api/doctor_notes/patient/:patientId
-// @access  Private/Doctor
+
 const getPatientNotes = async (req, res) => {
     try {
         const { patientId } = req.params;

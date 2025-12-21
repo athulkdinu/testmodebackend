@@ -24,7 +24,7 @@ const notificationSchema = new mongoose.Schema({
         default: false
     },
     relatedId: {
-        type: mongoose.Schema.Types.ObjectId // For linking to appointments, medicines, etc.
+        type: mongoose.Schema.Types.ObjectId // appointments, medicines link cheyyan.
     }
 }, { timestamps: true });
 

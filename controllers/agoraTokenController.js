@@ -1,17 +1,17 @@
 const { RtcTokenBuilder, RtcRole } = require('agora-token');
 
-// Generate Agora RTC token
+
 const generateToken = (req, res) => {
     try {
         const appId = process.env.AGORA_APP_ID;
         const appCertificate = process.env.AGORA_APP_CERTIFICATE;
-        // Safely access query and body parameters
+        
         const query = req.query || {};
         const body = req.body || {};
         
         const channelName = query.channelName || body.channelName || 'mainRoom';
         
-        // Debug logging (remove in production)
+        
         console.log('Token generation request:', {
             hasAppId: !!appId,
             hasCertificate: !!appCertificate,
@@ -22,16 +22,15 @@ const generateToken = (req, res) => {
             bodyParams: Object.keys(body)
         });
         
-        // Generate a random UID if not provided (between 1 and 2^32-1)
-        // If 0 is passed, generate random UID for token
+        
         let uid = query.uid || body.uid;
         if (!uid || uid === 0 || uid === '0') {
             uid = Math.floor(Math.random() * (Math.pow(2, 32) - 1)) + 1;
         } else {
             uid = parseInt(uid);
         }
-        const role = RtcRole.PUBLISHER; // PUBLISHER can publish and subscribe
-        const expirationTimeInSeconds = 3600; // Token expires in 1 hour
+        const role = RtcRole.PUBLISHER; 
+        const expirationTimeInSeconds = 3600; 
 
         if (!appId) {
             return res.status(400).json({ 
@@ -45,17 +44,15 @@ const generateToken = (req, res) => {
             });
         }
 
-        // Build token with uid
-        // tokenExpire: number of seconds from now (not a timestamp)
-        // privilegeExpire: optional, defaults to 0 (same as tokenExpire for full privileges)
+        
         const token = RtcTokenBuilder.buildTokenWithUid(
             appId,
             appCertificate,
             channelName,
             uid,
             role,
-            expirationTimeInSeconds, // tokenExpire: seconds from now
-            expirationTimeInSeconds  // privilegeExpire: same as tokenExpire
+            expirationTimeInSeconds, 
+            expirationTimeInSeconds  
         );
 
         res.json({

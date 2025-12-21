@@ -1,8 +1,6 @@
 const Medicine = require('../models/Medicine');
 
-// @desc    Get medicines
-// @route   GET /api/medicines
-// @access  Private
+
 const getMedicines = async (req, res) => {
     try {
         const medicines = await Medicine.find({ userId: req.user.id });
@@ -12,9 +10,7 @@ const getMedicines = async (req, res) => {
     }
 };
 
-// @desc    Add medicine
-// @route   POST /api/medicines
-// @access  Private
+
 const addMedicine = async (req, res) => {
     try {
         const medicine = await Medicine.create({
@@ -27,9 +23,7 @@ const addMedicine = async (req, res) => {
     }
 };
 
-// @desc    Update medicine
-// @route   PUT /api/medicines/:id
-// @access  Private
+
 const updateMedicine = async (req, res) => {
     try {
         const medicine = await Medicine.findById(req.params.id);
@@ -46,9 +40,7 @@ const updateMedicine = async (req, res) => {
     }
 };
 
-// @desc    Delete medicine
-// @route   DELETE /api/medicines/:id
-// @access  Private
+
 const deleteMedicine = async (req, res) => {
     try {
         const medicine = await Medicine.findById(req.params.id);

@@ -5,9 +5,7 @@ const Notification = require('../models/Notification');
 const Medicine = require('../models/Medicine');
 const DoctorNote = require('../models/DoctorNote');
 
-// @desc    Get Patient Dashboard
-// @route   GET /api/dashboard/patient
-// @access  Private/Patient
+
 const getPatientDashboard = async (req, res) => {
     try {
         const patientId = req.user.id;
@@ -15,7 +13,7 @@ const getPatientDashboard = async (req, res) => {
         // Total appointments
         const totalAppointments = await Appointment.countDocuments({ patientId });
         
-        // Upcoming appointments (approved, scheduled for future dates)
+        // Upcoming appointments 
         const today = new Date().toISOString().split('T')[0];
         const upcomingAppointments = await Appointment.find({
             patientId,
@@ -48,9 +46,6 @@ const getPatientDashboard = async (req, res) => {
     }
 };
 
-// @desc    Get Doctor Dashboard
-// @route   GET /api/dashboard/doctor
-// @access  Private/Doctor
 const getDoctorDashboard = async (req, res) => {
     try {
         const doctorId = req.user.id;
@@ -69,11 +64,11 @@ const getDoctorDashboard = async (req, res) => {
             status: 'pending'
         });
         
-        // Total patients (unique patients who have appointments)
+        // Total patients 
         const uniquePatients = await Appointment.distinct('patientId', { doctorId });
         const totalPatients = uniquePatients.length;
         
-        // Appointments per day for chart (last 7 days)
+        // Appointments of the day chart ine veendy
         const appointmentsPerDay = [];
         for (let i = 6; i >= 0; i--) {
             const date = new Date();
@@ -100,9 +95,7 @@ const getDoctorDashboard = async (req, res) => {
     }
 };
 
-// @desc    Get Admin Dashboard
-// @route   GET /api/dashboard/admin
-// @access  Private/Admin
+
 const getAdminDashboard = async (req, res) => {
     try {
         // Total doctors
